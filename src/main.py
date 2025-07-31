@@ -27,13 +27,14 @@ def iniciar_automacao():
     global parar_automacao
     parar_automacao = False  # Resetar flag
 
-    confirmacao = messagebox.askyesno("Confirmação", "Certifique-se de que a janela correta está ativa. Deseja iniciar?")
+    confirmacao = messagebox.askyesno("Confirmação", "Certifique-se de que a sistema Simpas está aberto. Deseja iniciar?")
     if not confirmacao:
         return
 
     try:
         tempo_pause = float(entry_pause.get())
-        tempo_sleep = float(entry_sleep.get())
+        # tempo_sleep = float(entry_sleep.get())
+        tempo_sleep = float(0.2)
         pa.PAUSE = tempo_pause
     except ValueError:
         messagebox.showerror("Erro", "Informe valores numéricos válidos para os tempos.")
@@ -46,8 +47,8 @@ def iniciar_automacao():
             messagebox.showerror("Erro", "Arquivo precisa ter ao menos duas colunas.")
             return
 
-        messagebox.showinfo("Atenção", "Você tem 3 segundos para focar a janela desejada.")
-        time.sleep(3)
+        messagebox.showinfo("Atenção", "Você tem 5 segundos para colocar o cursor no campo 'Código:' no sistema Simpas.")
+        time.sleep(5)
 
         for index, row in df.iterrows():
             if parar_automacao:
@@ -77,7 +78,7 @@ janela = tk.Tk()
 janela.title("Automação com Excel")
 janela.geometry("420x360")
 
-label_instrucao = tk.Label(janela, text="1. Selecione o Excel\n2. Ajuste os tempos\n3. Ative a janela destino\n4. Clique em 'Iniciar'", pady=10)
+label_instrucao = tk.Label(janela, text="1. Selecionar o arquivo\n2. Ajustar o tempo de lançamento\n3. Abrir sistema Simpas\n4. Abrir a janela 'Saída por Pedido'\n5. Preencher os campos 'Almoxarifado' e 'Area Req.'\n 6. Clique em 'Iniciar Automação'", pady=10)
 label_instrucao.pack()
 
 btn_arquivo = tk.Button(janela, text="Selecionar Arquivo", command=selecionar_arquivo)
@@ -89,10 +90,15 @@ label_arquivo.pack()
 frame_tempos = tk.Frame(janela)
 frame_tempos.pack(pady=10)
 
-tk.Label(frame_tempos, text="pa.PAUSE (entre comandos):").grid(row=0, column=0, sticky='e')
+tk.Label(frame_tempos, text="Tempo de lançamento em segundos:").grid(row=0, column=0, sticky='e')
 entry_pause = tk.Entry(frame_tempos, width=5)
-entry_pause.insert(0, "4")  # Valor padrão
+entry_pause.insert(0, "3")
 entry_pause.grid(row=0, column=1)
+
+# tk.Label(frame_tempos, text="Sleep (entre linhas):").grid(row=1, column=0, sticky='e')
+# entry_sleep = tk.Entry(frame_tempos, width=5)
+# entry_sleep.insert(0, "0.2")
+# entry_sleep.grid(row=1, column=1)
 
 btn_iniciar = tk.Button(janela, text="Iniciar Automação", command=iniciar_automacao_thread, state=tk.DISABLED)
 btn_iniciar.pack(pady=5)
